@@ -5,6 +5,9 @@
 ### Launch project
 `docker-compose up`
 
+### Load fixtures
+`docker exec -it sezane-api sh -c "php bin/console doctrine:fixtures:load --no-interaction"`
+
 ### Launch shell
 `docker exec -it sezane-api bash`
 
