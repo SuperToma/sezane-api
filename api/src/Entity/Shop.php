@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ShopRepository::class)]
 class Shop
@@ -14,18 +15,26 @@ class Shop
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['public:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['public:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 16, scale: 12, nullable: false)]
+    #[Groups(['public:read'])]
     private ?float $latitude = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 16, scale: 12, nullable: false)]
+    #[Groups(['public:read'])]
     private ?float $longitude = null;
 
+    #[Groups(['public:read'])]
+    public ?float $distanceMeters = null;
+
     #[ORM\Column(length: 255)]
+    #[Groups(['public:read'])]
     private ?string $address = null;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'shops')]
@@ -84,6 +93,18 @@ class Shop
         return $this;
     }
 
+    public function getDistanceMeters(): ?float
+    {
+        return $this->distanceMeters;
+    }
+
+    public function setDistanceMeters(float $distanceMeters): static
+    {
+        $this->distanceMeters = $distanceMeters;
+
+        return $this;
+    }
+
     public function getAddress(): ?string
     {
         return $this->address;
@@ -99,6 +120,12 @@ class Shop
     public function getManager(): ?Manager
     {
         return $this->manager;
+    }
+
+    #[Groups(['public:read'])]
+    public function getManagerId(): int
+    {
+        return $this->getManager()->getId();
     }
 
     public function setManager(?Manager $manager): static
